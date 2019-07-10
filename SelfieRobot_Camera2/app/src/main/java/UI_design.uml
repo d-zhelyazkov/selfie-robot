@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>xrc7331.selfierobot_camera2</OriginalElement>
+  <nodes>
+    <node x="146.75531914893617" y="487.8308510638297">xrc7331.selfierobot_camera2.gui.ProcessedImageListener</node>
+    <node x="108.01702127659581" y="224.92234042553193">xrc7331.selfierobot_camera2.gui.MonitorTypeChangeListener</node>
+    <node x="365.3180851063828" y="314.27659574468083">xrc7331.selfierobot_camera2.camera.CustomCameraView</node>
+    <node x="-80.69893617021273" y="571.9904255319149">xrc7331.selfierobot_camera2.gui.CommunicatorProgressListener</node>
+    <node x="-14.669148936170245" y="705.5510638297873">xrc7331.selfierobot_camera2.robot.RobotCommunicator</node>
+    <node x="404.5946808510638" y="-52.4936170212766">xrc7331.selfierobot_camera2.camera.CustomCamera</node>
+    <node x="611.1723404255317" y="497.55638297872343">xrc7331.selfierobot_camera2.camera.CameraImageProcessor.ImageType</node>
+    <node x="-70.92446808510633" y="353.8627659574468">xrc7331.selfierobot_camera2.gui.MainThreadExecutor</node>
+    <node x="12.230851063829903" y="85.66382978723405">xrc7331.selfierobot_camera2.gui.CameraParametersListener</node>
+    <node x="361.0319148936172" y="610.4287234042552">xrc7331.selfierobot_camera2.camera.CameraImageProcessor</node>
+    <node x="190.38085106382982" y="595.6202127659575">xrc7331.selfierobot_camera2.gui.DrawBoard</node>
+    <node x="389.2648936170211" y="243.37553191489354">xrc7331.selfierobot_camera2.camera.parameter</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="xrc7331.selfierobot_camera2.camera.CustomCameraView" target="xrc7331.selfierobot_camera2.camera.CameraImageProcessor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.camera.CustomCameraView" target="xrc7331.selfierobot_camera2.camera.CustomCamera">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.CameraParametersListener" target="xrc7331.selfierobot_camera2.camera.CustomCamera">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.camera.CustomCamera" target="xrc7331.selfierobot_camera2.camera.parameter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.ProcessedImageListener" target="xrc7331.selfierobot_camera2.gui.DrawBoard">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.CameraParametersListener" target="xrc7331.selfierobot_camera2.gui.MainThreadExecutor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.CommunicatorProgressListener" target="xrc7331.selfierobot_camera2.robot.RobotCommunicator">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.ProcessedImageListener" target="xrc7331.selfierobot_camera2.camera.CameraImageProcessor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.MonitorTypeChangeListener" target="xrc7331.selfierobot_camera2.camera.CustomCameraView">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.MonitorTypeChangeListener" target="xrc7331.selfierobot_camera2.gui.MainThreadExecutor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.CameraParametersListener" target="xrc7331.selfierobot_camera2.camera.parameter">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.camera.CustomCameraView" target="xrc7331.selfierobot_camera2.camera.CameraImageProcessor.ImageType">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.ProcessedImageListener" target="xrc7331.selfierobot_camera2.gui.MainThreadExecutor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.gui.CommunicatorProgressListener" target="xrc7331.selfierobot_camera2.gui.MainThreadExecutor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="xrc7331.selfierobot_camera2.camera.CameraImageProcessor.ImageType" target="xrc7331.selfierobot_camera2.camera.CameraImageProcessor">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.94662638469285" x="409.5" y="572.7308510638297" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

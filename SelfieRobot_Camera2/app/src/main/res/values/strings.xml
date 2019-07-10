@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SelfieRobot_Camera2</string>
+
+    <string name="camera">Camera</string>
+    <string name="blue_chnl">Blue channel</string>
+    <string name="red_chnl">Red channel</string>
+    <string name="sat_chnl">Saturation channel</string>
+    <string name="val_chnl">Value channel</string>
+    <string name="red_sat">Red-saturation</string>
+    <string name="blue_sat">Blue-saturation</string>
+    <string name="blue_bin">Blue-binary</string>
+    <string name="red_bin">Red-binary</string>
+
+    <string name="conn_err">Cannot connect to the robot!</string>
+    <string name="comm_err">Communication problem.</string>
+    <string name="robot_found">Robot recognized!</string>
+    <string name="robot_not_found">Robot NOT recognized!</string>
+    <string name="robot_not_paired">Robot NOT paired!</string>
+    <string name="robot_request">"Find me!"</string>
+    <string name="robot_connected">Robot connected.</string>
+
+</resources>

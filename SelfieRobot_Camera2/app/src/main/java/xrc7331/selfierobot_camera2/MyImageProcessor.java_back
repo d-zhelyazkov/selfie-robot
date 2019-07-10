@@ -1,0 +1,145 @@
+package xrc7331.selfierobot_camera2;
+
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import xrc7331.selfierobot_camera2.opencv.*;
+import xrc7331.selfierobot_camera2.tools.threshold_finder.LightThresholdFinder;
+
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+/**
+ * Created by XRC_7331 on 3/31/2016.
+ */
+public class MyImageProcessor {
+
+    private static MyImageProcessor INSTANCE = null;
+
+    public static MyImageProcessor getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new MyImageProcessor();
+
+        return INSTANCE;
+    }
+
+    private final Mat MORPHOLOGY_KERNEL = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+    private final ColorConverter COLOR_CONVERTER = ColorConverter.getInstance();
+    private final ImageProcessor IMAGE_PROCESSOR = ImageProcessor.getInstance();
+    private final Thresholder THRESHOLDER = Thresholder.getInstance();
+
+    private LockedMat[] imageBuffer;
+    private Semaphore newInputAvailable = new Semaphore(0);
+
+    private MyImageProcessor() {
+        ImageType[] imageTypes = ImageType.values();
+        imageBuffer = new LockedMat[imageTypes.length];
+        for (int i = 0; i < imageTypes.length; i++)
+            imageBuffer[i] = new LockedMat();
+    }
+
+    public synchronized void setInputImage(ExMat mat) throws InterruptedException {
+        LockedMat lockedMat = imageBuffer[ImageType.INPUT.ordinal()];
+        lockedMat.lock.acquire();
+
+        if (lockedMat.mat != null)
+            lockedMat.mat.release();
+
+        lockedMat.mat = mat.clone();
+        if (newInputAvailable.availablePermits() == 0)
+            newInputAvailable.release();
+        lockedMat.lock.release();
+    }
+
+    public ExMat getImage(ImageType imageType) throws InterruptedException {
+        LockedMat lockedMat = imageBuffer[imageType.ordinal()];
+        lockedMat.lock.acquire();
+
+        ExMat result = (lockedMat.mat == null) ? null : lockedMat.mat.clone();
+
+        lockedMat.lock.release();
+        return result;
+    }
+
+    public boolean hasUnprocessedImage() {
+        return (newInputAvailable.availablePermits() > 0);
+    }
+
+    public synchronized void process() throws InterruptedException {
+        newInputAvailable.acquire();
+        LockedMat inputImage = imageBuffer[ImageType.INPUT.ordinal()];
+        inputImage.lock.acquire();
+        ExMat bgrImage = COLOR_CONVERTER.convert(inputImage.mat, ColorType.BGR);
+        ExMat hsvImage = COLOR_CONVERTER.convert(inputImage.mat, ColorType.HSV);
+        inputImage.lock.release();
+
+        List<ExMat> bgrChannels = IMAGE_PROCESSOR.splitChannels(bgrImage);
+        ExMat blueImage = bgrChannels.get(0);
+        imageBuffer[ImageType.BLUE.ordinal()].setMat(blueImage);
+        ExMat redImage = bgrChannels.get(2);
+        imageBuffer[ImageType.RED.ordinal()].setMat(redImage);
+        bgrChannels.get(1).release();
+
+        List<ExMat> hsvChannels = IMAGE_PROCESSOR.splitChannels(hsvImage);
+        ExMat satImage = hsvChannels.get(1);
+        imageBuffer[ImageType.SAT.ordinal()].setMat(satImage);
+        ExMat valImage = hsvChannels.get(2);
+        imageBuffer[ImageType.VALUE.ordinal()].setMat(valImage);
+        hsvChannels.get(0).release();
+
+        ExMat blueSatImage = IMAGE_PROCESSOR.and(blueImage, satImage);
+        imageBuffer[ImageType.BLUE_SAT.ordinal()].setMat(blueSatImage);
+        ExMat redSatImage = IMAGE_PROCESSOR.and(redImage, satImage);
+        imageBuffer[ImageType.RED_SAT.ordinal()].setMat(redSatImage);
+        ExMat satValueImage = IMAGE_PROCESSOR.and(satImage, valImage);
+        imageBuffer[ImageType.SAT_VALUE.ordinal()].setMat(satValueImage);
+
+        ExMat blueSatThresholdedImage = THRESHOLDER.autoThreshold(blueSatImage, LightThresholdFinder.getInstance());
+        ExMat redSatThresholdedImage = THRESHOLDER.autoThreshold(redSatImage, LightThresholdFinder.getInstance());
+        ExMat resultImage = IMAGE_PROCESSOR.or(blueSatThresholdedImage, redSatThresholdedImage);
+        blueSatThresholdedImage.release();
+        redSatThresholdedImage.release();
+
+        Imgproc.erode(resultImage, resultImage, MORPHOLOGY_KERNEL);
+        Imgproc.dilate(resultImage, resultImage, MORPHOLOGY_KERNEL);
+        Imgproc.dilate(resultImage, resultImage, MORPHOLOGY_KERNEL);
+        imageBuffer[ImageType.RESULT.ordinal()].setMat(resultImage);
+
+        //return resultImage.clone();
+    }
+
+
+    public enum ImageType {
+        INPUT("input"),
+        BLUE("blue"),
+        RED("red"),
+        SAT("sat"),
+        VALUE("value"),
+        BLUE_SAT("blue_sat"),
+        RED_SAT("red_sat"),
+        SAT_VALUE("sat_value"),
+        RESULT("result");
+
+        String name;
+
+        ImageType(String name) {
+            this.name = name;
+        }
+    }
+
+    class LockedMat {
+        Semaphore lock = new Semaphore(1);
+        ExMat mat;
+
+        void setMat(ExMat mat) throws InterruptedException {
+            lock.acquire();
+            if (this.mat != null)
+                this.mat.release();
+
+            this.mat = mat;
+            lock.release();
+        }
+    }
+}
+
+
