@@ -23,3 +23,9 @@
 hs_err_pid*
 
 SelfieRobot_Camera2/\.idea/
+
+build/
+.gradle/
+.idea/
+*.iml
+local.properties
